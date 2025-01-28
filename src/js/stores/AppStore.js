@@ -1,8 +1,10 @@
-import { decorate, observable, action } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import humanize from '../logic/Humanizer';
 
 class AppStore {
   constructor() {
+    makeAutoObservable(this);
+
     this.timingPresetChoices = [
       {
         label: 'Tight',
@@ -48,15 +50,32 @@ class AppStore {
       },
     ];
 
+    this.noteLengthPresetChoices = [
+      {
+        label: 'Subtle',
+        value: 5,
+      },
+      {
+        label: 'Natural',
+        value: 10,
+      },
+      {
+        label: 'Loose',
+        value: 20,
+      },
+    ];
+
     this.timingPreset = 0;
     this.velocityPreset = 0;
     this.globalOffsetPreset = 1;
+    this.noteLengthPreset = 0;
 
     this.timingVariance = this.timingPresetChoices[this.timingPreset].value;
     this.velocityVariance = this.velocityPresetChoices[
       this.velocityPreset
     ].value;
     this.globalOffset = this.globalOffsetChoices[this.globalOffsetPreset].value;
+    this.noteLengthVariance = this.noteLengthPresetChoices[this.noteLengthPreset].value;
   }
 
   loadTimingPreset() {
@@ -73,22 +92,19 @@ class AppStore {
     this.globalOffset = this.globalOffsetChoices[this.globalOffsetPreset].value;
   }
 
+  loadNoteLengthPreset() {
+    this.noteLengthVariance = this.noteLengthPresetChoices[this.noteLengthPreset].value;
+  }
+
   apply(midi) {
     return humanize(
       midi,
       this.timingVariance,
       this.velocityVariance,
-      this.globalOffset
+      this.globalOffset,
+      this.noteLengthVariance
     );
   }
 }
 
-export default decorate(AppStore, {
-  timingPreset: observable,
-  velocityPreset: observable,
-  globalOffsetPreset: observable,
-  timingVariance: observable,
-  velocityVariance: observable,
-  globalOffset: observable,
-  apply: action,
-});
+export default AppStore;

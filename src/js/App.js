@@ -1,6 +1,6 @@
 import './App.scss';
 
-import { html } from 'lit-html';
+import { html } from 'lit';
 import { observable } from 'mobx';
 import { saveAs } from 'file-saver';
 import Midi from '@tonejs/midi';
@@ -49,6 +49,14 @@ const App = store =>
             value: store.globalOffset,
             onChange: v => (store.globalOffset = v),
           })}
+          ${NumberField({
+            id: 'noteLength',
+            label: 'Note Length (0ms - 100ms)',
+            min: 0,
+            max: 100,
+            value: store.noteLengthVariance,
+            onChange: v => (store.noteLengthVariance = v),
+          })}
         </div>
 
         <div class="app__header">Presets</div>
@@ -91,6 +99,19 @@ const App = store =>
             onChange: (i, v) => {
               store.globalOffsetPreset = i;
               store.loadGlobalOffsetPreset();
+            },
+          })}
+        </div>
+
+        <div class="app__header app__header--small">Note Length</div>
+        <div class="app__note-length-presets">
+          ${RadioGroup({
+            id: 'noteLengthPresetChoice',
+            choices: store.noteLengthPresetChoices,
+            selected: store.noteLengthPreset,
+            onChange: (i, v) => {
+              store.noteLengthPreset = i;
+              store.loadNoteLengthPreset();
             },
           })}
         </div>

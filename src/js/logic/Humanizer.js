@@ -6,9 +6,10 @@ import Midi from '@tonejs/midi';
  * @param {number} timing Upper bound timing offset.
  * @param {number} velocity Upper bound velocity offset.
  * @param {number} globalOffset Global timing offset.
+ * @param {number} noteLength Note length variance.
  * @returns {Midi} The humanized MIDI data.
  */
-function humanize(midi, timing, velocity, globalOffset) {
+function humanize(midi, timing, velocity, globalOffset, noteLength) {
   const midiCopy = midi.clone();
 
   midiCopy.name = `${midiCopy.name} - Humanized`;
@@ -35,6 +36,10 @@ function humanize(midi, timing, velocity, globalOffset) {
         minVelocityOffset,
         maxVelocityOffset
       );
+      
+      // Note length humanizing
+      const lengthVariation = (Math.random() * 2 - 1) * (noteLength / 100);
+      note.duration = note.duration * (1 + lengthVariation);
     });
 
     // 2nd pass: trim overlapped notes

@@ -1,6 +1,6 @@
 import './NumberField.scss';
 
-import { html } from 'lit-html';
+import { html } from 'lit';
 
 const NumberField = ({ id, label, min, max, step, value, onChange }) =>
   html`

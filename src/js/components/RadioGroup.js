@@ -1,6 +1,5 @@
 import './RadioGroup.scss';
-
-import { html } from 'lit-html';
+import { html } from 'lit';
 
 const Choice = ({ index, id, checked, onChange, label, value }) =>
   html`

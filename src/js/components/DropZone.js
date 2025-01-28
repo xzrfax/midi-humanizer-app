@@ -1,8 +1,7 @@
 import './DropZone.scss';
-
-import { html } from 'lit-html';
-import { classMap } from 'lit-html/directives/class-map';
-import { ifDefined } from 'lit-html/directives/if-defined';
+import { html } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { observable } from 'mobx';
 
 const dragOver = observable.box(false);
