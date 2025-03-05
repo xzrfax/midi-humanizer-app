@@ -1,9 +1,9 @@
 import './App.scss';
 
 import { html } from 'lit';
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 import { saveAs } from 'file-saver';
-import Midi from '@tonejs/midi';
+import { Midi } from '@tonejs/midi';
 import DropZone from './components/DropZone';
 import NumberField from './components/NumberField';
 import RadioGroup from './components/RadioGroup';
@@ -11,14 +11,17 @@ import RadioGroup from './components/RadioGroup';
 const midi = observable.box(null);
 let midiFilename = '';
 
+// Wrap midi updates in action
+const setMidi = action((data, filename) => {
+  midiFilename = filename;
+  midi.set(new Midi(data));
+});
+
 const App = store =>
   html`
     <div class="app">
       ${DropZone({
-        onDrop: (data, filename) => {
-          midiFilename = filename;
-          midi.set(new Midi(data));
-        },
+        onDrop: (data, filename) => setMidi(data, filename)
       })}
 
       <div class="app__section">

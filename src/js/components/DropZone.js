@@ -2,10 +2,13 @@ import './DropZone.scss';
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 
 const dragOver = observable.box(false);
 const label = observable.box('Drop MIDI Here');
+
+const setDragOver = action(value => dragOver.set(value));
+const setLabel = action(value => label.set(value));
 
 const DropZone = ({ id, onDrop }) =>
   html`
@@ -18,15 +21,15 @@ const DropZone = ({ id, onDrop }) =>
       @dragover=${e => {
         e.preventDefault();
         if (e.dataTransfer.types.indexOf('Files') !== -1) {
-          dragOver.set(true);
+          setDragOver(true);
         }
       }}
-      @dragleave=${() => dragOver.set(false)}
+      @dragleave=${() => setDragOver(false)}
       @drop=${e => {
         e.preventDefault();
-        dragOver.set(false);
+        setDragOver(false);
         const file = e.dataTransfer.files[0];
-        label.set(file.name);
+        setLabel(file.name);
         readFile(file, onDrop);
       }}
     >
